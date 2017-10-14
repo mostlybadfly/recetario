@@ -76,7 +76,7 @@ WSGI_APPLICATION = 'recetario.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'recetario',
         'USER': 'recetario_user',
         'PASSWORD': '',
