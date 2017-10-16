@@ -1,7 +1,10 @@
-<h1>{{ recipe.title }}</h1>
-<ul>
-  <li>Cuisine: {{ recipe.cuisine }}</li>
-  <li>Cooking Time: {{ recipe.cooking_time }}</li>
-  <li>Servings: {{ recipe.servings}}</li>
-  <li>Author: {{ recipe.created_by }}</li>
-</ul>
+{% extends 'recipes/base.html' %}
+{% block content %}
+    <h1>{{ recipe.title }}</h1>
+    <ul>
+      <li>Cuisine: {{ recipe.cuisine }}</li>
+      <li>Cooking Time: {{ recipe.cooking_time }}</li>
+      <li>Servings: {{ recipe.servings}}</li>
+      <li>Author: {{ recipe.created_by }}</li>
+    </ul>
+{% endblock %}
