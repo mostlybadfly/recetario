@@ -8,6 +8,13 @@
 <body>
   <div class="page-header">
     <h1><a href="/">Recetario</a></h1>
+    {% if user.is_authenticated %}
+    Welcome, {{ user.username }}<br>
+      <a href="{% url 'logout' %}">logout</a>
+    {% else %}
+      <a href="{% url 'login' %}">login</a><br>
+      New User? <a href="{% url 'signup' %}">Signup</a>
+    {% endif %}
   </div>
   <div class="content container">
     {% block content %}
