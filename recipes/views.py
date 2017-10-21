@@ -32,4 +32,4 @@ def signup(request):
             return redirect('/')
     else:
         form = UserCreationForm()
-    return render(request, 'recipes/signup.html', {'form': form})
+    return render(request, 'registration/signup.html', {'form': form})
