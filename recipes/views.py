@@ -2,6 +2,7 @@ from django.http import HttpResponse, Http404
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decorators import login_required
 from .forms import RecipeForm
 
 from .models import Recipe
@@ -11,6 +12,7 @@ def index(request):
     context = {'recipe_list': recipe_list}
     return render(request, 'recipes/index.html', context)
 
+@login_required(login_url='/login/')
 def add(request):
     form = RecipeForm(request.POST)
     if form.is_valid():
@@ -22,6 +24,7 @@ def add(request):
         form = RecipeForm()
     return render(request, 'recipes/add.html', {'form': form})
 
+@login_required(login_url='/login/')
 def edit(request, recipe_id):
     return HttpResponse("editing recipe % s." % recipe_id)
 
