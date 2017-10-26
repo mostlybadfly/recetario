@@ -1,0 +1,12 @@
+{% if ingredients %}
+  <ul>
+    {% for ingredient in ingredients reversed %}
+      <li>
+        {{ ingredient.quantity }} {{ingredient.measurement }} {{ ingredient.name }}
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  No ingredients, add one <a href="{% url 'edit_ingredients' recipe_id %}">here</a>
+{% endif %}
+

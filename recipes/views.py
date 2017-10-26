@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
-from .forms import RecipeForm
+from .forms import RecipeForm, IngredientForm
 
 from .models import Recipe
 
@@ -19,7 +19,7 @@ def add(request):
         recipe = form.save(commit=False)
         recipe.created_by = request.user
         recipe.save()
-        return redirect('detail', recipe_id=recipe.pk)
+        return redirect('edit', recipe_id=recipe.pk)
     else:
         form = RecipeForm()
     return render(request, 'recipes/add.html', {'form': form})
@@ -45,3 +45,29 @@ def signup(request):
     else:
         form = UserCreationForm()
     return render(request, 'registration/signup.html', {'form': form})
+
+@login_required
+def ingredients(request, recipe_id):
+    recipe = get_object_or_404(Recipe, pk=recipe_id)
+    context = {'ingredients': recipe.ingredients.all(), 'recipe_id': recipe_id}
+    return render(request, 'recipes/ingredients.html', context)
+
+@login_required
+def edit_ingredients(request, recipe_id):
+    form = IngredientForm(request.POST)
+    if form.is_valid():
+        ingredient = form.save(commit=False)
+        ingredient.recipe_id = recipe_id
+        ingredient.save()
+        return redirect('ingredients', recipe_id)
+    else:
+        form = IngredientForm()
+    return render(request, 'recipes/edit_ingredients.html', {'form': form})
+
+@login_required
+def instructions(request, recipe_id):
+    return HttpResponse("Instructions for recipe % s." % recipe_id)
+
+@login_required
+def edit_instructions(request, recipe_id):
+    return HttpResponse("editing instructions recipe % s." % recipe_id)
