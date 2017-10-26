@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
-from .forms import RecipeForm, IngredientForm
+from .forms import RecipeForm, IngredientForm, InstructionForm
 
 from .models import Recipe
 
@@ -72,12 +72,12 @@ def instructions(request, recipe_id):
 
 @login_required
 def edit_instructions(request, recipe_id):
-    form = IngredientForm(request.POST)
+    form = InstructionForm(request.POST)
     if form.is_valid():
         instruction = form.save(commit=False)
         instruction.recipe_id = recipe_id
         instruction.save()
         return redirect('instructions', recipe_id)
     else:
-        form = IngredientForm()
+        form = InstructionForm()
     return render(request, 'recipes/edit_instructions.html', {'form': form})
