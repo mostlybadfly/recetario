@@ -66,8 +66,18 @@ def edit_ingredients(request, recipe_id):
 
 @login_required
 def instructions(request, recipe_id):
-    return HttpResponse("Instructions for recipe % s." % recipe_id)
+    recipe = get_object_or_404(Recipe, pk=recipe_id)
+    context = {'instructions': recipe.instructions.all(), 'recipe_id': recipe_id}
+    return render(request, 'recipes/instructions.html', context)
 
 @login_required
 def edit_instructions(request, recipe_id):
-    return HttpResponse("editing instructions recipe % s." % recipe_id)
+    form = IngredientForm(request.POST)
+    if form.is_valid():
+        instruction = form.save(commit=False)
+        instruction.recipe_id = recipe_id
+        instruction.save()
+        return redirect('instructions', recipe_id)
+    else:
+        form = IngredientForm()
+    return render(request, 'recipes/edit_instructions.html', {'form': form})

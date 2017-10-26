@@ -1,0 +1,11 @@
+{% if instructions %}
+  <ul>
+    {% for instruction in instructions reversed %}
+      <li>
+        {{ instruction.ordinal }} {{instruction.instruction_text }}
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  No instructions, add one <a href="{% url 'edit_instructions' recipe_id %}">here</a>
+{% endif %}

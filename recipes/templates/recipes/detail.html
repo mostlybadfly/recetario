@@ -8,4 +8,5 @@
     <li>Author: {{ recipe.created_by }}</li>
   </ul>
   <a href="{% url 'ingredients' recipe.id %}">Ingredients</a>
+  <a href="{% url 'instructions' recipe.id %}">Instructions</a>
 {% endblock %}
