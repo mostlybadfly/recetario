@@ -19,14 +19,23 @@ def add(request):
         recipe = form.save(commit=False)
         recipe.created_by = request.user
         recipe.save()
-        return redirect('edit', recipe_id=recipe.pk)
+        return redirect('detail', recipe_id=recipe.pk)
     else:
         form = RecipeForm()
     return render(request, 'recipes/add.html', {'form': form})
 
 @login_required
 def edit(request, recipe_id):
-    return HttpResponse("editing recipe % s." % recipe_id)
+    recipe = get_object_or_404(Recipe, pk=recipe_id)
+    form = RecipeForm(request.POST, instance=recipe)
+    if form.is_valid():
+        recipe = form.save(commit=False)
+        recipe.created_by = request.user
+        recipe.save()
+        return redirect('detail', recipe_id=recipe.pk)
+    else:
+        form = RecipeForm(instance=recipe)
+    return render(request, 'recipes/add.html', {'form': form})
 
 def detail(request, recipe_id):
     recipe = get_object_or_404(Recipe, pk=recipe_id)
@@ -53,7 +62,7 @@ def ingredients(request, recipe_id):
     return render(request, 'recipes/ingredients.html', context)
 
 @login_required
-def edit_ingredients(request, recipe_id):
+def ingredient_edit(request, recipe_id):
     form = IngredientForm(request.POST)
     if form.is_valid():
         ingredient = form.save(commit=False)
@@ -62,7 +71,7 @@ def edit_ingredients(request, recipe_id):
         return redirect('ingredients', recipe_id)
     else:
         form = IngredientForm()
-    return render(request, 'recipes/edit_ingredients.html', {'form': form})
+    return render(request, 'recipes/ingredient_edit.html', {'form': form})
 
 @login_required
 def instructions(request, recipe_id):
@@ -71,7 +80,7 @@ def instructions(request, recipe_id):
     return render(request, 'recipes/instructions.html', context)
 
 @login_required
-def edit_instructions(request, recipe_id):
+def instruction_edit(request, recipe_id):
     form = InstructionForm(request.POST)
     if form.is_valid():
         instruction = form.save(commit=False)
@@ -80,4 +89,4 @@ def edit_instructions(request, recipe_id):
         return redirect('instructions', recipe_id)
     else:
         form = InstructionForm()
-    return render(request, 'recipes/edit_instructions.html', {'form': form})
+    return render(request, 'recipes/instruction_edit.html', {'form': form})
