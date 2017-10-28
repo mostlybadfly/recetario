@@ -2,10 +2,15 @@
   <ul>
     {% for ingredient in ingredients reversed %}
       <li>
-        {{ ingredient.quantity }} {{ingredient.measurement }} {{ ingredient.name }}
+        {{ ingredient.quantity }}
+        {{ingredient.measurement }}
+        {{ ingredient.name }}
+        <a href="{% url 'ingredient_edit' recipe_id ingredient.id %}">edit</a>
       </li>
     {% endfor %}
-  </ul>
+    <li><a href="{% url 'ingredient_add' recipe_id %}">Add another ingredient</a></li>
+  </ul><br>
+  <p><a href="{% url 'detail' recipe_id %}">Go back to recipe</a></p>
 {% else %}
-  No ingredients, add one <a href="{% url 'edit_ingredients' recipe_id %}">here</a>
+  No ingredients, add one <a href="{% url 'ingredient_add' recipe_id %}">here</a>
 {% endif %}
