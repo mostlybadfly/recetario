@@ -6,8 +6,29 @@
     <li>Cooking Time: {{ recipe.cooking_time }}</li>
     <li>Servings: {{ recipe.servings}}</li>
     <li>Author: {{ recipe.created_by }}</li>
+    <li><a href="{% url 'edit' recipe.id %}">Edit recipe information</a></li>
   </ul>
-  <a href="{% url 'edit' recipe.id %}">Edit this recipe</a><br>
-  <a href="{% url 'ingredients' recipe.id %}">Ingredients</a><br>
-  <a href="{% url 'instructions' recipe.id %}">Instructions</a><br>
+  <h3>Ingredients:</h3>
+  <ul>
+  {% for ingredient in ingredients reversed %}
+    <li>
+      {{ ingredient.quantity }}
+      {{ingredient.measurement }}
+      {{ ingredient.name }}
+      <a href="{% url 'ingredient_edit' recipe.id ingredient.id %}">edit</a>
+    </li>
+  {% endfor %}
+  <li><a href="{% url 'ingredient_add' recipe.id %}">Add an ingredient</a></li>
+  </ul>
+  <h3>Instructions:</h3>
+  <ul>
+    {% for instruction in instructions %}
+      <li>
+        {{ instruction.ordinal }}
+        {{instruction.instruction_text }}
+        <a href="{% url 'instruction_edit' recipe.id instruction.id %}">edit</a>
+      </li>
+    {% endfor %}
+    <li><a href="{% url 'instruction_add' recipe.id %}">Add a step</a></li>
+  </ul>
 {% endblock %}

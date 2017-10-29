@@ -39,13 +39,10 @@ def edit(request, recipe_id):
 
 def detail(request, recipe_id):
     recipe = get_object_or_404(Recipe, pk=recipe_id)
-    return render(request, 'recipes/detail.html', {'recipe': recipe})
-
-@login_required
-def ingredients(request, recipe_id):
-    recipe = get_object_or_404(Recipe, pk=recipe_id)
-    context = {'ingredients': recipe.ingredients.all(), 'recipe_id': recipe_id}
-    return render(request, 'recipes/ingredients.html', context)
+    ingredients = recipe.ingredients.all()
+    instructions = recipe.instructions.all()
+    return render(request, 'recipes/detail.html',
+                  {'recipe': recipe, 'ingredients': ingredients, 'instructions': instructions})
 
 @login_required
 def ingredient_add(request, recipe_id):
@@ -54,10 +51,11 @@ def ingredient_add(request, recipe_id):
         ingredient = form.save(commit=False)
         ingredient.recipe_id = recipe_id
         ingredient.save()
-        return redirect('ingredients', recipe_id)
+        return redirect('detail', recipe_id)
     else:
         form = IngredientForm()
-    return render(request, 'recipes/ingredient_edit.html', {'form': form})
+    return render(request, 'recipes/ingredient_edit.html',
+                  {'form': form, 'recipe_id': recipe_id})
 
 @login_required
 def ingredient_edit(request, recipe_id, ingredient_id):
@@ -66,16 +64,10 @@ def ingredient_edit(request, recipe_id, ingredient_id):
     if form.is_valid():
         ingredient = form.save(commit=False)
         ingredient.save()
-        return redirect('ingredients', ingredient.recipe_id)
+        return redirect('detail', ingredient.recipe_id)
     else:
         form = IngredientForm(instance=ingredient)
     return render(request, 'recipes/ingredient_edit.html', {'form': form})
-
-@login_required
-def instructions(request, recipe_id):
-    recipe = get_object_or_404(Recipe, pk=recipe_id)
-    context = {'instructions': recipe.instructions.all(), 'recipe_id': recipe_id}
-    return render(request, 'recipes/instructions.html', context)
 
 @login_required
 def instruction_add(request, recipe_id):
@@ -84,10 +76,11 @@ def instruction_add(request, recipe_id):
         instruction = form.save(commit=False)
         instruction.recipe_id = recipe_id
         instruction.save()
-        return redirect('instructions', recipe_id)
+        return redirect('detail', recipe_id)
     else:
         form = InstructionForm()
-    return render(request, 'recipes/instruction_edit.html', {'form': form})
+    return render(request, 'recipes/instruction_edit.html',
+                  {'form': form, 'recipe_id': recipe_id})
 
 @login_required
 def instruction_edit(request, recipe_id, instruction_id):
@@ -96,7 +89,7 @@ def instruction_edit(request, recipe_id, instruction_id):
     if form.is_valid():
         instruction = form.save(commit=False)
         instruction.save()
-        return redirect('instructions', instruction.recipe_id)
+        return redirect('detail', instruction.recipe_id)
     else:
         form = InstructionForm(instance=instruction)
     return render(request, 'recipes/instruction_edit.html', {'form': form})
