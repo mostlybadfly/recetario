@@ -1,10 +1,35 @@
 {% extends 'recipes/base.html' %}
 {% block content %}
-    <h1>{{ recipe.title }}</h1>
-    <ul>
-      <li>Cuisine: {{ recipe.cuisine }}</li>
-      <li>Cooking Time: {{ recipe.cooking_time }}</li>
-      <li>Servings: {{ recipe.servings}}</li>
-      <li>Author: {{ recipe.created_by }}</li>
+  <div class="text-center container">
+    <h1 class=>{{ recipe.title }}</h1>
+    <ul class="list-inline text-center">
+      <li class="list-inline-item"><strong>Cuisine: </strong>{{ recipe.cuisine }}</li class="list-inline-item">
+      <li class="list-inline-item"><strong>Cooking Time: </strong>{{ recipe.cooking_time }}</li class="list-inline-item">
+      <li class="list-inline-item"><strong>Servings: </strong>{{ recipe.servings}}</li class="list-inline-item">
+      <li class="list-inline-item"><strong>Author: </strong>{{ recipe.created_by }}</li class="list-inline-item">
+      <li class="list-inline-item"><a href="{% url 'edit' recipe.id %}">Edit recipe information</a></li class="list-inline-item">
+    </ul>
+    <h3>Ingredients:</h3>
+    <ul class="list-unstyled d-inline-block text-left">
+    {% for ingredient in ingredients reversed %}
+      <li class="ingredient">
+        {{ ingredient.quantity }}
+        {{ ingredient.measurement }}
+        {{ ingredient.name }}
+        <a href="{% url 'ingredient_edit' recipe.id ingredient.id %}">edit</a>
+      </li>
+    {% endfor %}
+    <li><a href="{% url 'ingredient_add' recipe.id %}">Add an ingredient</a></li>
+    </ul>
+    <h3>Instructions:</h3>
+    <ul class="list-unstyled text-left d-inline-block">
+      {% for instruction in instructions %}
+        <li>
+          {{ instruction.ordinal }}
+          {{instruction.instruction_text }}
+          <a href="{% url 'instruction_edit' recipe.id instruction.id %}">edit</a>
+        </li>
+      {% endfor %}
+      <li><a href="{% url 'instruction_add' recipe.id %}">Add a step</a></li>
     </ul>
 {% endblock %}

@@ -1,3 +1,4 @@
+ {% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,6 +11,7 @@
     <h1><a href="/">Recetario</a></h1>
     {% if user.is_authenticated %}
     Welcome, {{ user.username }}<br>
+    <a href="{% url 'add' %}">Add a recipe</a><br>
       <a href="{% url 'logout' %}">logout</a>
     {% else %}
       <a href="{% url 'login' %}">login</a><br>

@@ -1,0 +1,15 @@
+{% extends 'recipes/base.html' %}
+
+{% block content %}
+  <form action= "" method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Submit Recipe</button>
+  </form>
+  {% if form.instance.id %}
+    <a href="{% url 'detail' form.instance.id %}">Go back</a>
+  {% else %}
+    <a href="{% url 'index' %}">Go back</a>
+  {% endif %}
+{% endblock %}
+

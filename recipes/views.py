@@ -2,23 +2,97 @@ from django.http import HttpResponse, Http404
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decorators import login_required
+from .forms import RecipeForm, IngredientForm, InstructionForm
 
-from .models import Recipe
+from .models import Recipe, Ingredient, Instruction
 
 def index(request):
     recipe_list = Recipe.objects.all()
     context = {'recipe_list': recipe_list}
     return render(request, 'recipes/index.html', context)
 
+@login_required
 def add(request):
-    return HttpResponse("A new recipe is added here.")
+    form = RecipeForm(request.POST)
+    if form.is_valid():
+        recipe = form.save(commit=False)
+        recipe.created_by = request.user
+        recipe.save()
+        return redirect('detail', recipe_id=recipe.pk)
+    else:
+        form = RecipeForm()
+    return render(request, 'recipes/recipe_edit.html', {'form': form})
 
+@login_required
 def edit(request, recipe_id):
-    return HttpResponse("editing recipe % s." % recipe_id)
+    recipe = get_object_or_404(Recipe, pk=recipe_id)
+    form = RecipeForm(request.POST, instance=recipe)
+    if form.is_valid():
+        recipe = form.save(commit=False)
+        recipe.created_by = request.user
+        recipe.save()
+        return redirect('detail', recipe_id=recipe.pk)
+    else:
+        form = RecipeForm(instance=recipe)
+    return render(request, 'recipes/recipe_edit.html', {'form': form})
 
 def detail(request, recipe_id):
     recipe = get_object_or_404(Recipe, pk=recipe_id)
-    return render(request, 'recipes/detail.html', {'recipe': recipe})
+    ingredients = recipe.ingredients.all()
+    instructions = recipe.instructions.all()
+    return render(request, 'recipes/detail.html',
+                  {'recipe': recipe, 'ingredients': ingredients, 'instructions': instructions})
+
+@login_required
+def ingredient_add(request, recipe_id):
+    form = IngredientForm(request.POST)
+    if form.is_valid():
+        ingredient = form.save(commit=False)
+        ingredient.recipe_id = recipe_id
+        ingredient.save()
+        return redirect('detail', recipe_id)
+    else:
+        form = IngredientForm()
+    return render(request, 'recipes/ingredient_edit.html',
+                  {'form': form, 'recipe_id': recipe_id})
+
+@login_required
+def ingredient_edit(request, recipe_id, ingredient_id):
+    ingredient = get_object_or_404(Ingredient, pk=ingredient_id)
+    form = IngredientForm(request.POST, instance=ingredient)
+    if form.is_valid():
+        ingredient = form.save(commit=False)
+        ingredient.save()
+        return redirect('detail', ingredient.recipe_id)
+    else:
+        form = IngredientForm(instance=ingredient)
+    return render(request, 'recipes/ingredient_edit.html', {'form': form})
+
+@login_required
+def instruction_add(request, recipe_id):
+    form = InstructionForm(request.POST)
+    if form.is_valid():
+        instruction = form.save(commit=False)
+        instruction.recipe_id = recipe_id
+        instruction.save()
+        return redirect('detail', recipe_id)
+    else:
+        form = InstructionForm()
+    return render(request, 'recipes/instruction_edit.html',
+                  {'form': form, 'recipe_id': recipe_id})
+
+@login_required
+def instruction_edit(request, recipe_id, instruction_id):
+    instruction = get_object_or_404(Instruction, pk=instruction_id)
+    form = InstructionForm(request.POST, instance=instruction)
+    if form.is_valid():
+        instruction = form.save(commit=False)
+        instruction.save()
+        return redirect('detail', instruction.recipe_id)
+    else:
+        form = InstructionForm(instance=instruction)
+    return render(request, 'recipes/instruction_edit.html', {'form': form})
 
 def signup(request):
     if request.method == 'POST':

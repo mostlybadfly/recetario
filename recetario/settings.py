@@ -104,6 +104,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+LOGIN_URL = '/login'
 # Login redirect
 LOGIN_REDIRECT_URL = '/'
 # Internationalization
