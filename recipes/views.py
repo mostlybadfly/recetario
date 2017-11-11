@@ -3,35 +3,46 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
-from .forms import RecipeForm, IngredientForm, InstructionForm, IngredientFormSet
+from .forms import RecipeForm, IngredientForm, InstructionForm, IngredientFormSet, InstructionFormSet
 from django.views.generic.edit import CreateView
 from django.urls import reverse_lazy
+from django.db import transaction
 
 from .models import Recipe, Ingredient, Instruction
 
-class IngredientCreate(CreateView):
+class RecipeCreate(CreateView):
     model = Recipe
     fields = ['title', 'cuisine', 'cooking_time', 'servings']
-    succes_url = reverse_lazy('index')
+
+    def get_success_url(self):
+        return reverse_lazy('detail', args = (self.object.id,))
 
     def get_context_data(self, **kwargs):
-        data = super(IngredientCreate, self).get_context_data(**kwargs)
+        data = super(RecipeCreate, self).get_context_data(**kwargs)
         if self.request.POST:
-            data['ingredients'] = IngredientFormSet(self.request.POST)
+            data['ingredients'] = IngredientFormSet(self.request.POST, prefix='ingredients')
+            data['instructions'] = InstructionFormSet(self.request.POST, prefix='instructions')
         else:
             data['ingredients'] = IngredientFormSet()
+            data['instructions'] = InstructionFormSet()
         return data
-    
+
     def form_valid(self, form):
+        form.instance.created_by = self.request.user
         context = self.get_context_data()
         ingredients = context['ingredients']
+        instructions = context['instructions']
         with transaction.atomic():
             self.object = form.save()
 
             if ingredients.is_valid():
                 ingredients.instance = self.object
                 ingredients.save()
-        return super(IngredientCreate, self).form_valid(form)
+
+            if instructions.is_valid():
+                instructions.instance = self.object
+                instructions.save()
+        return super(RecipeCreate, self).form_valid(form)
 
 def index(request):
     recipe_list = Recipe.objects.all()
