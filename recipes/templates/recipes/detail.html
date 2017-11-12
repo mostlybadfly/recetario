@@ -11,15 +11,13 @@
     </ul>
     <h3>Ingredients:</h3>
     <ul class="list-unstyled d-inline-block text-left">
-    {% for ingredient in ingredients reversed %}
+    {% for ingredient in ingredients %}
       <li class="ingredient">
         {{ ingredient.quantity }}
         {{ ingredient.measurement }}
         {{ ingredient.name }}
-        <a href="{% url 'ingredient_edit' recipe.id ingredient.id %}">edit</a>
       </li>
     {% endfor %}
-    <li><a href="{% url 'ingredient_add' recipe.id %}">Add an ingredient</a></li>
     </ul>
     <h3>Instructions:</h3>
     <ul class="list-unstyled text-left d-inline-block">
@@ -27,9 +25,7 @@
         <li>
           {{ instruction.ordinal }}
           {{instruction.instruction_text }}
-          <a href="{% url 'instruction_edit' recipe.id instruction.id %}">edit</a>
         </li>
       {% endfor %}
-      <li><a href="{% url 'instruction_add' recipe.id %}">Add a step</a></li>
     </ul>
 {% endblock %}

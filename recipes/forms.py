@@ -20,5 +20,5 @@ class InstructionForm(ModelForm):
         model = Instruction
         fields = ('ordinal', 'instruction_text')
 
-IngredientFormSet = inlineformset_factory(Recipe, Ingredient, form = IngredientForm, extra = 2)
-InstructionFormSet = inlineformset_factory(Recipe, Instruction, form = InstructionForm, extra = 2)
+IngredientFormSet = inlineformset_factory(Recipe, Ingredient, form = IngredientForm, extra=1)
+InstructionFormSet = inlineformset_factory(Recipe, Instruction, form = InstructionForm, extra=1)
