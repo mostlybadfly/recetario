@@ -1,5 +1,15 @@
+/*
+mint = #E9FCFB
+teal = #317A89
+celadon = 238C7E
+rose = #B86A84
+sky = #77C5CE
+*/
+
 body {
   overflow-x: hidden;
+  background-color: #E9FCFB;
+  font-family: 'Montserrat', sans-serif;
 }
 
 #wrapper {
@@ -64,13 +74,12 @@ body {
 .sidebar-nav li a {
   display: block;
   text-decoration: none;
-  color: #999999;
+  color: #E9FCFB;
 }
 
 .sidebar-nav li a:hover {
-  text-decoration: none;
-  color: #fff;
-  background: rgba(255, 255, 255, 0.2);
+  color: #B86A84;
+  background: #E9FCFB;
 }
 
 .sidebar-nav li a:active, .sidebar-nav li a:focus {
@@ -84,12 +93,25 @@ body {
 }
 
 .sidebar-nav>.sidebar-header a {
-  color: #999999;
+  color: #77C5CE;
 }
 
 .sidebar-nav>.sidebar-header a:hover {
-  color: #fff;
+  color: #B86A84;
   background: none;
+}
+
+#sidebar {
+  background-color: #317A89;
+}
+
+#menu-toggle {
+  background-color: #B86A84;
+}
+
+.welcome {
+  background: #238C7E;
+  color: #E9FCFB;
 }
 
 @media(min-width:768px) {

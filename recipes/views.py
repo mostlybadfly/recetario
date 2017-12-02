@@ -12,7 +12,7 @@ from .models import Recipe, Ingredient, Instruction
 
 class RecipeCreate(CreateView):
     model = Recipe
-    fields = ['title', 'cuisine', 'cooking_time', 'servings']
+    form_class = RecipeForm
 
     def get_success_url(self):
         return reverse_lazy('detail', args = (self.object.id,))
