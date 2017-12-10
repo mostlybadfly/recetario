@@ -1,6 +1,6 @@
 from django.forms import ModelForm, inlineformset_factory
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Field
+from crispy_forms.layout import Layout, Field, Div
 
 from .models import Recipe, Ingredient, Instruction
 
@@ -10,12 +10,11 @@ class RecipeForm(ModelForm):
         self.helper = FormHelper()
         self.helper.form_tag = False
         self.helper.form_show_labels = False
-        self.helper.field_class = "col"
         self.helper.layout = Layout (
-            Field('title', placeholder="Title"),
-            Field('cuisine', placeholder="Cuisine"),
-            Field('cooking_time', placeholder="Cooking Time"),
-            Field('servings', placeholder="Servings"),
+            Div(Field('title', placeholder="Title"), css_class='col-md-5'),
+            Div(Field('cuisine', placeholder="Cuisine"), css_class='col-md-3'),
+            Div(Field('cooking_time', placeholder="Cooking Time"), css_class='col-md-2'),
+            Div(Field('servings', placeholder="Servings"), css_class='col-md-2'),
         )
 
     class Meta:
@@ -27,9 +26,9 @@ class IngredientForm(ModelForm):
         super(IngredientForm, self).__init__(*args, **kwargs)
         self.helper = FormSetHelper()
         self.helper.layout = Layout (
-            Field('quantity', placeholder="Quantity"),
-            Field('measurement', placeholder="Measurement"),
-            Field('name', placeholder="Name")
+            Div(Field('quantity', placeholder="Quantity"), css_class='col-md-2'),
+            Div(Field('measurement', placeholder="Measurement"), css_class='col-md-2'),
+            Div(Field('name', placeholder="Name", size=45), css_class='col-md-7')
         )
 
     class Meta:
@@ -41,8 +40,8 @@ class InstructionForm(ModelForm):
         super(InstructionForm, self).__init__(*args, **kwargs)
         self.helper = FormSetHelper()
         self.helper.layout = Layout (
-            Field('ordinal', placeholder="Position"),
-            Field('instruction_text', placeholder="Add a Step", rows=1, cols=75),
+            Div(Field('ordinal', placeholder="Position", readonly=True), css_class='col-md-1'),
+            Div(Field('instruction_text', placeholder="Add a Step", rows=1, cols=75), css_class='col-md-10')
         )
 
     class Meta:
@@ -56,7 +55,6 @@ class FormSetHelper(FormHelper):
         self.render_hidden_fields = True
         self.disable_csrf = True
         self.form_show_labels = False
-        self.field_class = "col"
 
 
 IngredientFormSet = inlineformset_factory(Recipe, Ingredient, form = IngredientForm, extra=1)

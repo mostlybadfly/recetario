@@ -43,13 +43,17 @@
       addText: 'add ingredient',
       deleteText: 'remove',
       prefix: '{{ ingredients.prefix }}',
-      formCssClass: 'ingredients-formset'
+      formCssClass: 'ingredients-formset',
   });
   $('.instruction-formset-row').formset({
       addText: 'add a step',
       deleteText: 'remove',
       prefix: '{{ instructions.prefix }}',
-      formCssClass: 'instructions_formset'
+      formCssClass: 'instructions_formset',
+      added: function newInstruction(row) {
+          var total = $('#id_instructions-TOTAL_FORMS').val();
+          $("input[name*='ordinal']" ).last().val(total);
+    }
   });
 </script>
 {% endblock %}
