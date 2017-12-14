@@ -12,7 +12,7 @@ from .models import Recipe, Ingredient, Instruction
 
 class RecipeCreate(CreateView):
     model = Recipe
-    fields = ['title', 'cuisine', 'cooking_time', 'servings']
+    form_class = RecipeForm
 
     def get_success_url(self):
         return reverse_lazy('detail', args = (self.object.id,))
@@ -24,7 +24,7 @@ class RecipeCreate(CreateView):
             data['instructions'] = InstructionFormSet(self.request.POST, prefix='instructions')
         else:
             data['ingredients'] = IngredientFormSet()
-            data['instructions'] = InstructionFormSet()
+            data['instructions'] = InstructionFormSet(initial=[{'ordinal' : 1}])
         return data
 
     def form_valid(self, form):
@@ -43,7 +43,7 @@ class RecipeCreate(CreateView):
 
 class RecipeUpdate(UpdateView):
     model = Recipe
-    fields = ['title', 'cuisine', 'cooking_time', 'servings']
+    form_class = RecipeForm
 
     def get_success_url(self):
         return reverse_lazy('detail', args = (self.object.id,))
@@ -55,7 +55,7 @@ class RecipeUpdate(UpdateView):
             data['instructions'] = InstructionFormSet(self.request.POST, instance=self.object, prefix='instructions')
         else:
             data['ingredients'] = IngredientFormSet(instance=self.object)
-            data['instructions'] = InstructionFormSet(instance=self.object)
+            data['instructions'] = InstructionFormSet(instance=self.object, initial=[{'ordinal': self.object.instructions.count()+1}])
         return data
 
     def form_valid(self, form):

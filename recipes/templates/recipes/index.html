@@ -1,12 +1,22 @@
 {% extends 'recipes/base.html' %}
 {% block content %}
-  {% if recipe_list %}
-    <ul>
-    {% for recipe in recipe_list %}
-      <li><a href="{% url 'detail' recipe.id %}">{{ recipe.title }}</a></li>
-    {% endfor %}
-    </ul>
-  {% else %}
-    <p>No recipes are available.</p>
-  {% endif %}
+  <div class="row">
+    <div class="container text-center">
+      <h1 class="display-1">Welcome to Recetario</h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="container text-center">
+      {% if recipe_list %}
+        <h1>Recipe List</h1>
+        <ul class="list-unstyled">
+        {% for recipe in recipe_list %}
+          <li><a href="{% url 'detail' recipe.id %}">{{ recipe.title }}</a></li>
+        {% endfor %}
+        </ul>
+      {% else %}
+        <p>No recipes are available.</p>
+      {% endif %}
+    </div>
+  </div>
 {% endblock %}
